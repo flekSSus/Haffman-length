@@ -24,6 +24,7 @@ int main()
 
     code_length+=num_of_unif*arr_freq[0];
     code_length+=num_of_unif*arr_freq[1];
+
     for(size_t i(2);i<arr_freq.size();++i)
     {
         code_length+=arr_freq[i]*(num_of_unif-i+1);    
