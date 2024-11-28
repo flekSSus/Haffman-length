@@ -1,38 +1,50 @@
-#include <fstream>
 #include <iostream>
-#include <vector>
+#include <fstream>
+#include<queue>
 
-
-int main()
+int main() 
 {
+    
     std::ifstream in("huffman.in");
     std::ofstream out("huffman.out");
 
-    size_t sz(0);
-    size_t code_length(0);
-    std::vector<int> arr_freq;
-    size_t num_of_unif(0);
+    int numOfEl(0);
+    long long sumOfTwoMin(0);
+    long long codeLength(0);
 
-    in>>sz;
+    in>>numOfEl;
 
-    num_of_unif=sz-1;
-    arr_freq.resize(sz,0);
-    for(size_t i(0);i<sz;++i)
-    {
-        in>>arr_freq[i];
-    }
-
-    code_length+=num_of_unif*arr_freq[0];
-    code_length+=num_of_unif*arr_freq[1];
-
-    for(size_t i(2);i<arr_freq.size();++i)
-    {
-        code_length+=arr_freq[i]*(num_of_unif-i+1);    
-    }
-
-    out<<code_length;
-
-    in.close();
-    out.close();
+    std::priority_queue<long long ,std::vector<long long>,std::greater<long long>> heap;
     
+    int tmp(0);
+    in>>tmp;
+    sumOfTwoMin+=tmp;
+    in>>tmp;
+    sumOfTwoMin+=tmp;
+    heap.push(sumOfTwoMin);
+    codeLength+=sumOfTwoMin;
+
+    for(int i(2),tmp(0);i<numOfEl;++i)
+    {
+        in>>tmp;
+        heap.push(tmp);
+    }
+
+
+    while(heap.size()!=1)
+    {
+        sumOfTwoMin=heap.top();
+        heap.pop();
+        sumOfTwoMin+=heap.top();
+        heap.push(sumOfTwoMin);
+        heap.pop();
+        codeLength+=sumOfTwoMin;
+    }
+   
+
+
+
+    out<<codeLength;
+
+    return 0;
 }
