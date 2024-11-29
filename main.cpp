@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include<queue>
+#include <vector>
 
 int main() 
 {
@@ -9,40 +9,52 @@ int main()
     std::ofstream out("huffman.out");
 
     int numOfEl(0);
-    long long sumOfTwoMin(0);
     long long codeLength(0);
 
+    std::vector<long long> freq;
+    std::vector<long long> sum;
     in>>numOfEl;
 
-    std::priority_queue<long long ,std::vector<long long>,std::greater<long long>> heap;
-    
-    int tmp(0);
-    in>>tmp;
-    sumOfTwoMin+=tmp;
-    in>>tmp;
-    sumOfTwoMin+=tmp;
-    heap.push(sumOfTwoMin);
-    codeLength+=sumOfTwoMin;
+    freq.resize(numOfEl,0);
 
-    for(int i(2),tmp(0);i<numOfEl;++i)
+    for(int i(0);i<numOfEl;++i)
     {
-        in>>tmp;
-        heap.push(tmp);
+        in>>freq[i];
     }
 
+    int firstMinIndex(0),secondMinIndex(0);
 
-    while(heap.size()!=1)
+    while(firstMinIndex<numOfEl ||  secondMinIndex<sum.size()-1)
     {
-        sumOfTwoMin=heap.top();
-        heap.pop();
-        sumOfTwoMin+=heap.top();
-        heap.push(sumOfTwoMin);
-        heap.pop();
-        codeLength+=sumOfTwoMin;
+        long long firstMin(0),secondMin(0);
+        long long sumOfTwo(0);
+
+        if(secondMinIndex>=sum.size() || (firstMinIndex<numOfEl && freq[firstMinIndex]<=sum[secondMinIndex]))
+        {
+            firstMin=freq[firstMinIndex];
+            ++firstMinIndex;
+        }
+        else 
+        {
+            firstMin=sum[secondMinIndex];
+            ++secondMinIndex;
+        }
+
+        if(secondMinIndex>=sum.size() || (firstMinIndex<numOfEl && freq[firstMinIndex]<=sum[secondMinIndex]))
+        {
+            secondMin=freq[firstMinIndex];
+            ++firstMinIndex;
+        }
+        else 
+        {
+            secondMin=sum[secondMinIndex];
+            ++secondMinIndex;
+        }
+
+        sumOfTwo=firstMin+secondMin;
+        codeLength+=sumOfTwo;
+        sum.push_back(sumOfTwo);
     }
-   
-
-
 
     out<<codeLength;
 
